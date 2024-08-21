@@ -4,7 +4,14 @@ hostname=$(cat /etc/hostname)
 distrib=$(grep '^PRETTY_NAME' /etc/os-release | cut -d'"' -f2)
 user=$USER
 
-sudo truncate -s 0 /etc/motd
+MAX_SIZE=1000
+
+# Vérifier la taille du fichier
+file_size=$(stat -c%s /etc/motd)
+
+if [ "$file_size" -ge "$MAX_SIZE" ]; then
+    sudo truncate -s 0 /etc/motd
+fi
 
 asciiDebian="
                       &&                          
